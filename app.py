@@ -10,12 +10,8 @@ from utils.input_transformer import stepEnconding
 df = pd.read_csv("data/WA_Fn-UseC_-Telco-Customer-Churn.csv")
 
 # Carrega o modelo treinado
-with open("model_churn.pkl", "rb") as f:
+with open("model_churn.pkl", "wb") as f:
     modelo = pickle.load(f)
-
-# Carrega as colunas usadas no treino
-with open("model_columns.pkl", "rb") as f:
-    model_columns = pickle.load(f)
 
 # Define colunas categóricas e numéricas
 obj_cols = df.select_dtypes(include="object").columns.tolist()
