@@ -4,7 +4,6 @@ import streamlit as st
 import pandas as pd
 import pickle
 import numpy as np
-from utils.input_transformer import encondingInput
 from utils.input_transformer import stepEnconding
 
 # Carrega o DataFrame base

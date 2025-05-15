@@ -18,27 +18,30 @@ def getDummies(dataframe):
     return dummiedf
 
 
-def encondingInput(input_data, dataframe):
-    obj_columns = getColumnByTypes(dataframe, "objects")
 
-    for categorie in obj_columns:
-        uniques = dataframe[categorie].unique()
-        input_data[categorie] = pd.Categorical(
-            input_data[categorie], categories=uniques
-        )
+def tenureToYears(tenure_value):
+    years = tenure_value // 12
+    return years
 
-    dummies = pd.get_dummies(input_data.drop(columns=["customerID"]), drop_first=False)
-
-    dfd = dataframe
-    dfd = getDummies(dfd)
-    dummies_cols = dfd.drop(
-        columns=["Churn"]
-    )
-    aligned_input = dummies.reindex(columns=dummies_cols.columns, fill_value=0)
-
-    return aligned_input
+def createYearColumn(dataframe):
+    dataframe["years"] = dataframe["tenure"].map(tenureToYears)
+    return dataframe
 
 
+def dataCleaning(dataframe):
+    dataframe["TotalCharges"] = pd.to_numeric(dataframe["TotalCharges"], errors="coerce")
+    dataframe["TotalCharges"] = dataframe["TotalCharges"].fillna(0)
+
+    boolean_cols = dataframe.columns
+    for col in boolean_cols:
+        if set(dataframe[col]) <= {"Yes", "No"}:
+            dataframe[col] = dataframe[col].map({"No": 0, "Yes": 1})
+
+    createYearColumn(dataframe)
+
+    dataframe = dataframe.drop(columns="Churn")
+
+    return dataframe
 
 def stepEnconding(dataframe, input_data):
     obj_columns = getColumnByTypes(dataframe, "objects")
@@ -52,7 +55,7 @@ def stepEnconding(dataframe, input_data):
 
     dummies = pd.get_dummies(input_data, drop_first=False)
 
-    dfd = dataframe
+    dfd = dataCleaning(dataframe)
     dfd = getDummies(dfd)
 
     aligned_input = dummies.reindex(columns=dfd.columns, fill_value=0)
@@ -60,23 +63,3 @@ def stepEnconding(dataframe, input_data):
     return aligned_input
 
 
-# def stepEnconding(dataframe,input_data):
-#     obj_columns = getColumnByTypes(dataframe, "objects")
-
-#     for categorie in obj_columns:
-#         uniques = dataframe[categorie].unique()
-#         input_data[categorie] = pd.Categorical(
-#             input_data[categorie], categories=uniques
-#         )
-
-#     dummies = pd.get_dummies(input_data.drop(columns=["Churn","customerID"]), drop_first=False)
-
-#     dfd = dataframe
-#     dfd = getDummies(dfd)
-#     dummies_cols = dfd.drop(
-#         columns=["Churn"]
-#     )
-
-#     aligned_input = dummies.reindex(columns=dummies_cols.columns, fill_value=0)
-
-#     return aligned_input

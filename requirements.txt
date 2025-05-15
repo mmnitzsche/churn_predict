@@ -1,0 +1,4 @@
+numpy==1.24.2
+pandas==2.2.3
+streamlit==1.45.0
+typing_extensions==4.13.2
