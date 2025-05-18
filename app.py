@@ -156,15 +156,26 @@ for col, (plan_name, data) in zip([col1, col2, col3], planos.items()):
     with col:
         st.markdown(
             f"""
-            <div style="
+            <style>
+                .card {{
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                }}
+                .card:hover {{
+                    transform: scale(1.05);
+                    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+                }}
+            </style>
+
+            <div class="card" style="
                 background-color: {cor};
+                border: 1px solid;
+                border-color: #ededed;
                 color: #323232;
                 width: 225px;
                 padding: 10px;
                 margin: 10px auto;  
                 border-radius: 10px;
                 text-align: center;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             ">
                 <h2>{plan_name}</h2>
                 <p><strong>Previsão:</strong> {resultado}</p>
@@ -179,6 +190,7 @@ for col, (plan_name, data) in zip([col1, col2, col3], planos.items()):
             """,
             unsafe_allow_html=True,
         )
+
 
         if st.button(f"Verificar churn - {plan_name}"):
             st.write(input_df.transpose())
