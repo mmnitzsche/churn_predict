@@ -3,7 +3,7 @@ import pandas as pd
 import pickle
 from utils.input_transformer import stepEnconding
 
-df = pd.read_csv("data/WA_Fn-UseC_-Telco-Customer-Churn.csv")
+df = pd.read_csv("kaggle/input/WA_Fn-UseC_-Telco-Customer-Churn.csv")
 modelo = pickle.load(open("model_churn.pkl", "rb"))
 
 
